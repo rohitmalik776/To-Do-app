@@ -59,7 +59,7 @@ int main() {
 
 	partitionMaker third(0, height / 4 + 2 * (height / 5) + 1, width, height / 5 - 1);
 	
-
+	
 	//Making space for "Add Task"
 
 	partitionMaker newTask(0, height / 4 + 3 * (height / 5) + 1, width, 90);
@@ -88,6 +88,8 @@ int main() {
 	//Declaring text variable to add a new task
 	textMaker addText(0, 0);
 	addText.text.setFillColor(sf::Color(0, 0, 0));
+	addText.text.setFont(openSansRegular);
+	addText.text.setString("LOL");
 
 	//Taking the "New Task" as input
 	sf::String newString;
@@ -144,6 +146,7 @@ int main() {
 		mainWin.draw(terText.text);
 		mainWin.draw(newText.text);
 
+		
 
 
 
@@ -205,6 +208,7 @@ int main() {
 							
 							addText.text.setPosition(0, 0);
 							addText.text.setFillColor(sf::Color(0, 0, 0));
+							addText.text.setCharacterSize(50);
 							int iterator = -1;
 
 							while(newTaskWin.isOpen()){
