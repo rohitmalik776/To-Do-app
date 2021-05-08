@@ -31,6 +31,64 @@ int main() {
 	topBar.setFillColor(sf::Color(0, 32, 63));
 
 	//Adding "To-Do" text
+
+	//Importing png files
+
+	sf::Image editIconImg;
+	if (!editIconImg.loadFromFile("Resources/edit_icon.png")) {
+	
+		std::cout << "Failed to load Resources/edit_icon.png\n";
+		return 0;
+
+	}
+	sf::Texture editIcon;
+	editIcon.loadFromImage(editIconImg);
+	
+	//First Edit Icon
+	sf::Sprite firstEditIcon;
+	firstEditIcon.setTexture(editIcon);
+	firstEditIcon.setPosition(width - 80 + 18, height / 4 + 6);
+	firstEditIcon.setScale(sf::Vector2f(0.05,0.05));
+
+	//Second Edit Icon
+	sf::Sprite secEditIcon;
+	secEditIcon.setTexture(editIcon);
+	secEditIcon.setPosition(width - 80 + 18, height / 4 + 6 + (height / 5 - 1));
+	secEditIcon.setScale(sf::Vector2f(0.05, 0.05));
+
+	//Thired Edit Icon
+	sf::Sprite terEditIcon;
+	terEditIcon.setTexture(editIcon);
+	terEditIcon.setPosition(width - 80 + 18, height / 4 + 6 + 2*(height / 5 - 1));
+	terEditIcon.setScale(sf::Vector2f(0.05, 0.05));
+
+	//Importing Delete Image
+	sf::Image delIconImg;
+	if (!delIconImg.loadFromFile("Resources/delete_icon.png")) {
+	
+		std::cout << "Error loading Resources/delete_icon.png\n";
+		return 0;
+
+	}
+
+	sf::Texture delIcon;
+	delIcon.loadFromImage(delIconImg);
+
+	//Making sprites of Delete Icons
+	sf::Sprite firstDelIcon;
+	firstDelIcon.setTexture(delIcon);
+	firstDelIcon.setPosition(width - 80 + 18 - 8, height / 4 + 6 - 5 + (height / 5 - 1) / 2);
+	firstDelIcon.setScale(0.03, 0.03);
+
+	sf::Sprite secDelIcon;
+	secDelIcon = firstDelIcon;
+	secDelIcon.setPosition(width - 80 + 18 - 8, height / 4 + 6 - 5 + 3*(height / 5 - 1) / 2);
+
+	sf::Sprite terDelIcon;
+	terDelIcon = firstDelIcon;
+	terDelIcon.setPosition(width - 80 + 18 - 8, height / 4 + 6 - 5 + 5 * (height / 5 - 1) / 2);
+
+
 	
 	//Importing font files
 	sf::Font openSansBold;
@@ -53,12 +111,23 @@ int main() {
 
 	// Adding spaces for the tasks
 
-	partitionMaker first(0, height/4 + 1, width, height / 5 - 1);
+	partitionMaker first(0, height/4 + 1, width - 80, height / 5 - 1);
 
-	partitionMaker second(0, height / 4 + height/5 + 1, width, height / 5 - 1);
+	partitionMaker second(0, height / 4 + height/5 + 1, width - 80, height / 5 - 1);
 
-	partitionMaker third(0, height / 4 + 2 * (height / 5) + 1, width, height / 5 - 1);
+	partitionMaker third(0, height / 4 + 2 * (height / 5) + 1, width - 80, height / 5 - 1);
 	
+
+	//Adding Operations Space to the tasks space
+
+	partitionMaker firstOptionDelete( width - 79, height/4 + 1, 79, (height / 5 -1)/2);
+	partitionMaker firstOptionEdit(width - 79, height / 4 + 2 + (height / 5 - 1) / 2, 79, (height / 5 - 1)/2 );
+
+	partitionMaker secOptionDelete(width - 79, height / 4 + height / 5 + 1, 79, (height / 5 - 1) / 2);
+	partitionMaker secOptionEdit(width - 79, height / 4 + height / 5 + 2 + (height / 5 - 1) / 2, 79, (height / 5 - 1) / 2);
+
+	partitionMaker terOptionDelete(width - 79, height / 4 + 2 * (height / 5) + 1, 79, (height / 5 - 1) / 2);
+	partitionMaker terOptionEdit(width - 79, height / 4 + 2 * (height / 5) + 2 + (height / 5 - 1) / 2, 79, (height / 5 - 1) / 2);
 	
 	//Making space for "Add Task"
 
@@ -89,10 +158,10 @@ int main() {
 	textMaker addText(0, 0);
 	addText.text.setFillColor(sf::Color(0, 0, 0));
 	addText.text.setFont(openSansRegular);
-	addText.text.setString("LOL");
+	addText.text.setString("Enter the task here");
 
 	//Taking the "New Task" as input
-	sf::String newString;
+	
 	sf::Event textEvent;
 
 	//Tracking mouse pos
@@ -115,12 +184,15 @@ int main() {
 		else if (tasks.size() == 1 + taskIterator) {
 		
 			firstText.text.setString(tasks[taskIterator]);
+			secText.text.setString(" ");
+			terText.text.setString(" ");
 		
 		}
 		else if (tasks.size() == 2 + taskIterator) {
 		
 			firstText.text.setString(tasks[taskIterator]);
 			secText.text.setString(tasks[taskIterator + 1]);
+			terText.text.setString(" ");
 
 		}
 
@@ -146,7 +218,28 @@ int main() {
 		mainWin.draw(terText.text);
 		mainWin.draw(newText.text);
 
-		
+		//Drawing Options space
+		mainWin.draw(firstOptionDelete.space);
+		mainWin.draw(firstOptionEdit.space);
+
+		mainWin.draw(secOptionDelete.space);
+		mainWin.draw(secOptionEdit.space);
+
+		mainWin.draw(terOptionDelete.space);
+		mainWin.draw(terOptionEdit.space);
+
+
+		//Drawing Sprites
+
+		//Edit Icons
+		mainWin.draw(firstEditIcon);
+		mainWin.draw(secEditIcon);
+		mainWin.draw(terEditIcon);
+
+		//Delete Icons
+		mainWin.draw(firstDelIcon);
+		mainWin.draw(secDelIcon);
+		mainWin.draw(terDelIcon);
 
 
 
@@ -162,6 +255,34 @@ int main() {
 				case (sf::Event::Closed):
 					mainWin.close();
 					break;
+
+
+				//Tracking Keyboard key presses
+
+				case (sf::Event::KeyPressed): 
+					
+					if (mainEvent.key.code == 72) {
+					
+						taskIterator += 3;
+					
+					}
+					if (mainEvent.key.code == 71) {
+					
+						taskIterator -= 3;
+						
+						if (taskIterator < 0)
+							taskIterator += 3;
+					
+					}
+
+
+
+					break;
+					
+					
+					
+
+
 
 				//Tracking the click position
 
@@ -208,10 +329,13 @@ int main() {
 							
 							addText.text.setPosition(0, 0);
 							addText.text.setFillColor(sf::Color(0, 0, 0));
-							addText.text.setCharacterSize(50);
 							int iterator = -1;
 
+							//String to store entered data
+							sf::String newString;
+
 							while(newTaskWin.isOpen()){
+								
 
 								newTaskWin.clear(sf::Color(255, 255, 255));
 								newTaskWin.draw(addText.text);
@@ -219,6 +343,8 @@ int main() {
 								newTaskWin.display();
 
 								while (newTaskWin.pollEvent(textEvent)) {
+
+									
 
 									if (textEvent.type == sf::Event::Closed) {
 
@@ -233,6 +359,7 @@ int main() {
 
 											tasks.push_back(newString);
 
+											
 											newTaskWin.close();
 										
 										}
