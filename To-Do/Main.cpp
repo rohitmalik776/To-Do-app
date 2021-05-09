@@ -15,9 +15,6 @@ int main() {
 	//The tasks array
 	std::vector <std::string> tasks;
 
-//	tasks.push_back("This is the Task 1");
-//	tasks.push_back("This is the Task 2");
-//	tasks.push_back("This is the Task 3");
 
 	//Creating the main Window
 	int width = 450, height = 600;
@@ -120,14 +117,14 @@ int main() {
 
 	//Adding Operations Space to the tasks space
 
-	partitionMaker firstOptionDelete( width - 79, height/4 + 1, 79, (height / 5 -1)/2);
-	partitionMaker firstOptionEdit(width - 79, height / 4 + 2 + (height / 5 - 1) / 2, 79, (height / 5 - 1)/2 );
+	partitionMaker firstOptionEdit( width - 79, height/4 + 1, 79, (height / 5 -1)/2);
+	partitionMaker firstOptionDelete(width - 79, height / 4 + 2 + (height / 5 - 1) / 2, 79, (height / 5 - 1)/2 );
 
-	partitionMaker secOptionDelete(width - 79, height / 4 + height / 5 + 1, 79, (height / 5 - 1) / 2);
-	partitionMaker secOptionEdit(width - 79, height / 4 + height / 5 + 2 + (height / 5 - 1) / 2, 79, (height / 5 - 1) / 2);
+	partitionMaker secOptionEdit(width - 79, height / 4 + height / 5 + 1, 79, (height / 5 - 1) / 2);
+	partitionMaker secOptionDelete(width - 79, height / 4 + height / 5 + 2 + (height / 5 - 1) / 2, 79, (height / 5 - 1) / 2);
 
-	partitionMaker terOptionDelete(width - 79, height / 4 + 2 * (height / 5) + 1, 79, (height / 5 - 1) / 2);
-	partitionMaker terOptionEdit(width - 79, height / 4 + 2 * (height / 5) + 2 + (height / 5 - 1) / 2, 79, (height / 5 - 1) / 2);
+	partitionMaker terOptionEdit(width - 79, height / 4 + 2 * (height / 5) + 1, 79, (height / 5 - 1) / 2);
+	partitionMaker terOptionDelete(width - 79, height / 4 + 2 * (height / 5) + 2 + (height / 5 - 1) / 2, 79, (height / 5 - 1) / 2);
 	
 	//Making space for "Add Task"
 
@@ -194,6 +191,13 @@ int main() {
 			secText.text.setString(tasks[taskIterator + 1]);
 			terText.text.setString(" ");
 
+		}
+		else {
+		
+			firstText.text.setString(" ");
+			secText.text.setString(" ");
+			terText.text.setString(" ");
+		
 		}
 
 
@@ -316,6 +320,85 @@ int main() {
 						}
 					
 					}
+
+					//Checking for Edit Icon clicks
+					if (mainEvent.mouseButton.button == sf::Mouse::Left) {
+
+						if (firstOptionEdit.inRange(mousePos.x, mousePos.y)) {
+
+							std::cout << "In first Option Edit\n";
+
+
+						}
+
+					}
+
+					if (mainEvent.mouseButton.button == sf::Mouse::Left) {
+
+						if (secOptionEdit.inRange(mousePos.x, mousePos.y)) {
+
+							std::cout << "In sec Option Edit\n";
+
+
+						}
+
+					}
+
+					if (mainEvent.mouseButton.button == sf::Mouse::Left) {
+
+						if (terOptionEdit.inRange(mousePos.x, mousePos.y)) {
+
+							std::cout << "In ter Option Edit\n";
+
+
+						}
+
+					}
+
+					//Checking for Delete Icon clicks
+					if (mainEvent.mouseButton.button == sf::Mouse::Left) {
+
+						if (firstOptionDelete.inRange(mousePos.x, mousePos.y)) {
+
+							std::cout << "In first Option Delete\n";
+							if (tasks.size() >= taskIterator + 1) {
+								tasks.erase(tasks.begin() + taskIterator);
+							}
+
+						}
+
+					}
+
+					if (mainEvent.mouseButton.button == sf::Mouse::Left) {
+
+						if (secOptionDelete.inRange(mousePos.x, mousePos.y)) {
+
+							std::cout << "In sec Option Delete\n";
+							if (tasks.size() >= taskIterator + 2) {
+								tasks.erase(tasks.begin() + taskIterator + 1);
+							}
+
+						}
+
+					}
+
+					if (mainEvent.mouseButton.button == sf::Mouse::Left) {
+
+						if (terOptionDelete.inRange(mousePos.x, mousePos.y)) {
+
+							std::cout << "In ter Option Delete\n";
+							if (tasks.size() >= taskIterator + 3) {
+								tasks.erase(tasks.begin() + taskIterator + 2);
+							}
+
+						}
+
+					}
+
+
+
+
+
 					if (mainEvent.mouseButton.button == sf::Mouse::Left) {
 					
 						if (newTask.inRange(mousePos.x, mousePos.y)) {
@@ -427,6 +510,57 @@ int main() {
 
 					}
 					else newTask.unHovered();
+
+					if (firstOptionDelete.inRange(mousePos.x, mousePos.y)) {
+
+						firstOptionDelete.hovered();
+
+					}
+
+					else firstOptionDelete.unHovered();
+
+					if (secOptionDelete.inRange(mousePos.x, mousePos.y)) {
+
+						secOptionDelete.hovered();
+
+					}
+					
+					else secOptionDelete.unHovered();
+
+					if (terOptionDelete.inRange(mousePos.x, mousePos.y)) {
+
+						terOptionDelete.hovered();
+
+					}
+
+					else terOptionDelete.unHovered();
+					
+
+					//Edit options
+					if (firstOptionEdit.inRange(mousePos.x, mousePos.y)) {
+
+						firstOptionEdit.hovered();
+
+					}
+
+					else firstOptionEdit.unHovered();
+
+					if (secOptionEdit.inRange(mousePos.x, mousePos.y)) {
+
+						secOptionEdit.hovered();
+
+					}
+
+					else secOptionEdit.unHovered();
+
+					if (terOptionEdit.inRange(mousePos.x, mousePos.y)) {
+
+						terOptionEdit.hovered();
+
+					}
+
+					else terOptionEdit.unHovered();
+
 
 					break;
 
