@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include "Utilities.cpp"
@@ -7,6 +8,12 @@
 
 //Function to edit tasks
 sf::String* taskEditor(std::string, sf::Font*);
+
+//Funciton to import data
+void import( std::vector<std::string>* );
+
+//Function to export data
+void eksport( std::vector<std::string>* );
 
 
 
@@ -20,10 +27,13 @@ int main() {
 	//The tasks array
 	std::vector <std::string> tasks;
 
+	//Importing the tasks from database file
+	import(&tasks);
+
 
 	//Creating the main Window
 	int width = 450, height = 600;
-	sf::RenderWindow mainWin(sf::VideoMode(width, height), "Basic To-Do app");
+	sf::RenderWindow mainWin(sf::VideoMode(width, height), "Basic To-Do app", sf::Style::Close);
 	mainWin.setFramerateLimit(20);
 
 	//Adding the top rectangular bar using a rectangle
@@ -36,15 +46,30 @@ int main() {
 
 	//Importing png files
 
+	//Importing title icon
+	sf::Image titleIcon;
+	if (!titleIcon.loadFromFile("Resources/title_icon.png")) {
+	
+		std::cout << "Error loading title_icon.png\n";
+		system("pause");
+		return 0;
+
+	}
+
+
 	sf::Image editIconImg;
 	if (!editIconImg.loadFromFile("Resources/edit_icon.png")) {
 	
 		std::cout << "Failed to load Resources/edit_icon.png\n";
+		system("pause");
 		return 0;
 
 	}
 	sf::Texture editIcon;
 	editIcon.loadFromImage(editIconImg);
+
+	//Setting title icon
+	mainWin.setIcon(titleIcon.getSize().x, titleIcon.getSize().y, titleIcon.getPixelsPtr());
 	
 	//First Edit Icon
 	sf::Sprite firstEditIcon;
@@ -311,6 +336,7 @@ int main() {
 			switch (mainEvent.type) {
 
 				case (sf::Event::Closed):
+					eksport(&tasks);
 					mainWin.close();
 					break;
 
@@ -646,7 +672,7 @@ sf::String* taskEditor(std::string str, sf::Font* openSansRegular) {
 	sf::Event editorEvent;
 	sf::Text editorText;
 	editorText.setFont(*openSansRegular);
-	editorText.setCharacterSize(40);
+//	editorText.setCharacterSize(40);
 	editorText.setFillColor(sf::Color(0, 0, 0));
 
 	sf::String* strin = new sf::String;
@@ -716,6 +742,45 @@ sf::String* taskEditor(std::string str, sf::Font* openSansRegular) {
 
 	}
 
+
+
+}
+
+
+//Defining the export function
+void eksport(std::vector <std::string>* tasks) {
+
+	std::string temp;
+	std::ofstream output;
+	output.open("Resources/dataBase.txt");
+
+	for (int i = 0; i < tasks->size(); i++) {
+
+		output << (*tasks)[i];
+		if (!(i == tasks->size() - 1))
+			output << '`';
+
+	}
+
+}
+
+//Defining the import function
+void import(std::vector<std::string>* tasks) {
+
+	std::string temp;
+	std::ifstream input;
+	input.open("Resources/dataBase.txt");
+
+	while (!input.eof()) {
+	
+		if (!input.eof()) {
+			std::getline(input, temp, '`');
+//			std::cout << "Temp is: " << (int) temp[0] << std::endl;
+			if ( (temp[0] != 0) )
+				(*tasks).push_back(temp);
+		}
+
+	}
 
 
 }
