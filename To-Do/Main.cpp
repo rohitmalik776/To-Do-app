@@ -172,8 +172,53 @@ int main() {
 
 	//The main event loop
 	sf::Event mainEvent;
+
+	
+	//Adding number of tasks and page number on top right
+	sf::Text taskIndicator;
+	taskIndicator.setFont(openSansBold);
+	taskIndicator.setFillColor(sf::Color(255,255,255));
+	taskIndicator.setCharacterSize(20);
+	taskIndicator.setPosition(5, height / 4 - 25);
+	sf::String taskIndicatorString;
+	taskIndicator.setString(taskIndicatorString);
+	taskIndicatorString += "Tasks: 0";
+	unsigned int taskSize;
+
+	//Adding page number on top right
+	sf::Text pageIndicator;
+	pageIndicator.setFont(openSansBold);
+	pageIndicator.setFillColor(sf::Color(255, 255, 255));
+	pageIndicator.setCharacterSize(20);
+	pageIndicator.setPosition(width - 95, height / 4 - 25);
+	sf::String pageIndicatorString;
+	pageIndicator.setString(taskIndicatorString);
+	pageIndicatorString += "Page: 0";
+	unsigned int pageIndicatorSize, finalPageInd = 0;
+
 	
 	while (mainWin.isOpen()) {
+
+
+
+		//Updating Task Indicator text
+		taskSize = tasks.size() / 10;
+		taskIndicatorString.erase(7, 2);
+		taskIndicatorString += ((taskSize % 10) + '0');
+		taskIndicatorString += ((tasks.size() % 10) + '0');
+		taskIndicator.setString(taskIndicatorString);
+
+		//Updating Page Indicator text
+		finalPageInd = taskIterator / 3 + 1;
+		pageIndicatorSize = finalPageInd / 10;
+		pageIndicatorString.erase(6, 2);
+
+		pageIndicatorString += ((pageIndicatorSize % 10) + '0');
+		pageIndicatorString += ((finalPageInd % 10)+'0');
+		
+		pageIndicator.setString(pageIndicatorString);
+
+
 
 
 		if (tasks.size() >= 3 + taskIterator) {
@@ -251,6 +296,10 @@ int main() {
 		mainWin.draw(terDelIcon);
 
 
+		//Drawing task Indicator
+		mainWin.draw(taskIndicator);
+		mainWin.draw(pageIndicator);
+
 
 		mainWin.display();
 
@@ -273,6 +322,9 @@ int main() {
 					if (mainEvent.key.code == 72) {
 					
 						taskIterator += 3;
+
+						if (taskIterator >= tasks.size())
+							taskIterator -= 3;
 					
 					}
 					if (mainEvent.key.code == 71) {
@@ -331,10 +383,10 @@ int main() {
 
 						if (firstOptionEdit.inRange(mousePos.x, mousePos.y)) {
 
-							std::cout << "In first Option Edit\n";
-							tasks.insert(tasks.begin(), *taskEditor(tasks[taskIterator], &openSansRegular));
-							tasks.erase(tasks.begin() + 1);
-
+							if (tasks.size() >= taskIterator + 1) {
+								tasks.insert(tasks.begin(), *taskEditor(tasks[taskIterator], &openSansRegular));
+								tasks.erase(tasks.begin() + 1);
+							}
 						}
 
 					}
@@ -343,10 +395,11 @@ int main() {
 
 						if (secOptionEdit.inRange(mousePos.x, mousePos.y)) {
 
-							std::cout << "In sec Option Edit\n";
-							tasks.insert(tasks.begin() + 1, *taskEditor(tasks[taskIterator + 1], &openSansRegular));
-							tasks.erase(tasks.begin() + 2);
-
+							
+							if (tasks.size() >= taskIterator + 2) {
+								tasks.insert(tasks.begin() + 1, *taskEditor(tasks[taskIterator + 1], &openSansRegular));
+								tasks.erase(tasks.begin() + 2);
+							}
 						}
 
 					}
@@ -355,10 +408,11 @@ int main() {
 
 						if (terOptionEdit.inRange(mousePos.x, mousePos.y)) {
 
-							std::cout << "In ter Option Edit\n";
-							tasks.insert(tasks.begin() + 2, *taskEditor(tasks[taskIterator + 2], &openSansRegular));
-							tasks.erase(tasks.begin() + 3);
-
+							
+							if (tasks.size() >= taskIterator + 3) {
+								tasks.insert(tasks.begin() + 2, *taskEditor(tasks[taskIterator + 2], &openSansRegular));
+								tasks.erase(tasks.begin() + 3);
+							}
 
 						}
 
@@ -369,7 +423,6 @@ int main() {
 
 						if (firstOptionDelete.inRange(mousePos.x, mousePos.y)) {
 
-							std::cout << "In first Option Delete\n";
 							if (tasks.size() >= taskIterator + 1) {
 								tasks.erase(tasks.begin() + taskIterator);
 							}
@@ -382,7 +435,6 @@ int main() {
 
 						if (secOptionDelete.inRange(mousePos.x, mousePos.y)) {
 
-							std::cout << "In sec Option Delete\n";
 							if (tasks.size() >= taskIterator + 2) {
 								tasks.erase(tasks.begin() + taskIterator + 1);
 							}
@@ -395,7 +447,6 @@ int main() {
 
 						if (terOptionDelete.inRange(mousePos.x, mousePos.y)) {
 
-							std::cout << "In ter Option Delete\n";
 							if (tasks.size() >= taskIterator + 3) {
 								tasks.erase(tasks.begin() + taskIterator + 2);
 							}
@@ -641,7 +692,6 @@ sf::String* taskEditor(std::string str, sf::Font* openSansRegular) {
 
 					(*strin).erase(iterator, 1);
 					iterator--;
-					std::cout << iterator << std::endl;
 					editorText.setString(*strin);
 
 				}
