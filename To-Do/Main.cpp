@@ -5,6 +5,11 @@
 
 
 
+//Function to edit tasks
+sf::String* taskEditor(std::string, sf::Font*);
+
+
+
 int main() {
 
 	int taskIterator = 0;
@@ -327,7 +332,8 @@ int main() {
 						if (firstOptionEdit.inRange(mousePos.x, mousePos.y)) {
 
 							std::cout << "In first Option Edit\n";
-
+							tasks.insert(tasks.begin(), *taskEditor(tasks[taskIterator], &openSansRegular));
+							tasks.erase(tasks.begin() + 1);
 
 						}
 
@@ -338,7 +344,8 @@ int main() {
 						if (secOptionEdit.inRange(mousePos.x, mousePos.y)) {
 
 							std::cout << "In sec Option Edit\n";
-
+							tasks.insert(tasks.begin() + 1, *taskEditor(tasks[taskIterator + 1], &openSansRegular));
+							tasks.erase(tasks.begin() + 2);
 
 						}
 
@@ -349,6 +356,8 @@ int main() {
 						if (terOptionEdit.inRange(mousePos.x, mousePos.y)) {
 
 							std::cout << "In ter Option Edit\n";
+							tasks.insert(tasks.begin() + 2, *taskEditor(tasks[taskIterator + 2], &openSansRegular));
+							tasks.erase(tasks.begin() + 3);
 
 
 						}
@@ -571,5 +580,92 @@ int main() {
 	}
 
 	return 0;
+
+}
+
+
+
+//Function to edit tasks
+
+sf::String* taskEditor(std::string str, sf::Font* openSansRegular) {
+
+	sf::RenderWindow editorWin(sf::VideoMode(450, 300), "Edit task");
+	editorWin.setFramerateLimit(20);
+
+	sf::Event editorEvent;
+	sf::Text editorText;
+	editorText.setFont(*openSansRegular);
+	editorText.setCharacterSize(40);
+	editorText.setFillColor(sf::Color(0, 0, 0));
+
+	sf::String* strin = new sf::String;
+	int iterator = 0;
+
+
+	for (int i = 0; i < str.size(); i++) {
+
+		*strin += (str[i]);
+		iterator = i;
+
+	}
+
+
+	while (editorWin.isOpen()) {
+
+		editorText.setString(*strin);
+
+
+		editorWin.clear(sf::Color(255, 255, 255));
+		editorWin.draw(editorText);
+		editorWin.display();
+
+		while (editorWin.pollEvent(editorEvent)) {
+
+			if (editorEvent.type == sf::Event::Closed) {
+
+				editorWin.close();
+				return strin;
+
+			}
+
+			else if (editorEvent.type == sf::Event::KeyPressed) {
+
+				if (editorEvent.key.code == sf::Keyboard::Escape) {
+
+					editorWin.close();
+					return strin;
+
+				}
+
+				else if (editorEvent.key.code == sf::Keyboard::BackSpace && (iterator >= 0)) {
+
+					(*strin).erase(iterator, 1);
+					iterator--;
+					std::cout << iterator << std::endl;
+					editorText.setString(*strin);
+
+				}
+
+			}
+
+
+			else if (editorEvent.type == sf::Event::TextEntered) {
+
+				if (editorEvent.text.unicode < 128 && editorEvent.text.unicode != 8) {
+					*strin += static_cast<char>(editorEvent.text.unicode);
+					iterator++;
+					editorText.setString(*strin);
+				}
+
+			}
+
+
+
+		}
+
+
+	}
+
+
 
 }
